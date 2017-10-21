@@ -138,6 +138,7 @@ public class ClinicServiceTests {
 
         Pet pet = new Pet();
         pet.setName("bowser");
+        pet.setWeight(0.8);
         Collection<PetType> types = this.pets.findPetTypes();
         pet.setType(EntityUtils.getById(types, PetType.class, 2));
         pet.setBirthDate(new Date());
@@ -152,6 +153,7 @@ public class ClinicServiceTests {
         // checks that id has been generated
         assertThat(pet.getId()).isNotNull();
     }
+    
 
     @Test
     @Transactional

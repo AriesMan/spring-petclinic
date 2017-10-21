@@ -31,6 +31,9 @@ import org.springframework.validation.Validator;
 public class PetValidator implements Validator {
 
     private static final String REQUIRED = "required";
+    private static final String INVALID_VALUE = "invalid value";
+    private static final String WEIGHT_RANGE = ": range is between 0.5kg and 200.98kg";
+
 
     @Override
     public void validate(Object obj, Errors errors) {
@@ -49,6 +52,15 @@ public class PetValidator implements Validator {
         // birth date validation
         if (pet.getBirthDate() == null) {
             errors.rejectValue("birthDate", REQUIRED, REQUIRED);
+        }
+
+        //weight validation
+        Double weight = pet.getWeight();
+        if (weight == null) {
+            errors.rejectValue("weight", REQUIRED, REQUIRED);
+        }else if(weight < 0.5 || weight > 200.89){
+            errors.rejectValue("weight", INVALID_VALUE, INVALID_VALUE + WEIGHT_RANGE);
+
         }
     }
 

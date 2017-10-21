@@ -76,9 +76,31 @@ public class PetControllerTests {
             .param("name", "Betty")
             .param("type", "hamster")
             .param("birthDate", "2015/02/12")
+            .param("weight", "0.9")
         )
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/owners/{ownerId}"));
+    }
+
+    @Test
+    public void testProcessCreationFormValidationFail() throws Exception {
+        mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID)
+            .param("name", "Betty")
+            .param("type", "hamster")
+            .param("birthDate", "2015/02/12")
+            .param("weight", "0.3")
+        )
+            .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void testProcessCreationFormValidationFailNoWeight() throws Exception {
+        mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID)
+            .param("name", "Bingo")
+            .param("type", "hamster")
+            .param("birthDate", "2016/02/12")
+        )
+            .andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -107,6 +129,7 @@ public class PetControllerTests {
             .param("name", "Betty")
             .param("type", "hamster")
             .param("birthDate", "2015/02/12")
+            .param("weight", "1.8")
         )
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/owners/{ownerId}"));

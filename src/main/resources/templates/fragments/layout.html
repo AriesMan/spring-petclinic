@@ -88,6 +88,16 @@
   <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
   <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(function () {
+        $("#datepicker").datepicker({ dateFormat: 'yy/mm/dd' });
+
+    });
+
+    /*]]>*/
+   </script>
 
 </body>
 
