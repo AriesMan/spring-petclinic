@@ -15,11 +15,7 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -54,6 +50,11 @@ public class Vet extends Person {
             this.specialties = new HashSet<>();
         }
         return this.specialties;
+    }
+
+    public void setSpecialties(Set<Specialty> specialties) {
+        getSpecialtiesInternal().addAll(specialties);
+        //this.specialties.addAll(specialties);
     }
 
     protected void setSpecialtiesInternal(Set<Specialty> specialties) {

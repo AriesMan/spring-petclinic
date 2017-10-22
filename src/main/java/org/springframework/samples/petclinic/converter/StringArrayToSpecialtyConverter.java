@@ -1,0 +1,27 @@
+package org.springframework.samples.petclinic.converter;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.samples.petclinic.vet.Specialty;
+import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Component
+final class StringArrayToSpecialtyConverter implements Converter<String[], Set<Specialty>> {
+
+    @Override
+    public Set<Specialty> convert(String[] source) {
+        Set<Specialty> set = new HashSet<Specialty>();
+        for(String str : source){
+            Specialty spec  = new Specialty();
+            spec.setName(str);
+            set.add(spec);
+        }
+        return set;
+    }
+}
+
+
+
+

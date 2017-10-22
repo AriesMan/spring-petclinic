@@ -15,12 +15,16 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author Juergen Hoeller
@@ -31,11 +35,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 class VetController {
 
+    private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vets/createVetForm";
     private final VetRepository vets;
 
     @Autowired
     public VetController(VetRepository clinicService) {
         this.vets = clinicService;
+    }
+
+    @ModelAttribute("specialties")
+    public Collection<Specialty> populateSpecialties() {
+        return this.vets.findSpecialties();
+    }
+
+    @InitBinder("vet")
+    public void initVetBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(new VetValidator());
     }
 
     @RequestMapping(value = { "/vets.html" })
@@ -55,6 +70,29 @@ class VetController {
         Vets vets = new Vets();
         vets.getVetList().addAll(this.vets.findAll());
         return vets;
+    }
+
+    @RequestMapping(value = "/vets/new", method = RequestMethod.GET)
+    public String initCreationForm(Map<String, Object> model) {
+        Vet vet = new Vet();
+        model.put("vet", vet);
+        return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+    }
+
+
+    @RequestMapping(value = "/vets/new", method = RequestMethod.POST)
+    public String processCreationForm(@Valid Vet vet, BindingResult result) {
+        if (result.hasErrors()) {
+            return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+        } else {
+            Set<Specialty> toBeAdded = populateSpecialties().stream().filter( specialty ->
+                vet.getSpecialties().stream().map(b -> b.getName()).collect(Collectors.toList())
+                    .contains(specialty.getName())).collect(Collectors.toSet());
+
+            vet.setSpecialtiesInternal(toBeAdded);
+            this.vets.save(vet);
+            return "redirect:/vets.html";
+        }
     }
 
 }

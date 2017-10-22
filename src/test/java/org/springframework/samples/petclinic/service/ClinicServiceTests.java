@@ -1,9 +1,14 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +20,7 @@ import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.owner.PetRepository;
 import org.springframework.samples.petclinic.owner.PetType;
+import org.springframework.samples.petclinic.vet.Specialty;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.samples.petclinic.visit.Visit;
@@ -99,6 +105,30 @@ public class ClinicServiceTests {
 
     @Test
     @Transactional
+    public void shouldInsertVet() {
+        Collection<Vet> vets = this.vets.findByLastName("Schultz");
+        int found = vets.size();
+        assertEquals(0,found);
+        Vet vet = new Vet();
+        vet.setFirstName("Sam");
+        vet.setLastName("Schultz");
+        vet.setSpecialties(this.vets.findSpecialties().stream().collect(Collectors.toSet()));
+
+        this.vets.save(vet);
+        assertThat(vet.getId().longValue()).isNotEqualTo(0);
+
+        vets = this.vets.findByLastName("Schultz");
+
+        Optional<List<Specialty>> opr =   vets.stream().filter(e -> e.getLastName().
+            equals("Schultz")).map(r -> r.getSpecialties()).findAny();
+        assertEquals(opr.get().size() ,3);
+
+        assertThat(vets.size()).isEqualTo(found + 1);
+
+    }
+
+    @Test
+    @Transactional
     public void shouldUpdateOwner() {
         Owner owner = this.owners.findById(1);
         String oldLastName = owner.getLastName();
@@ -153,7 +183,7 @@ public class ClinicServiceTests {
         // checks that id has been generated
         assertThat(pet.getId()).isNotNull();
     }
-    
+
 
     @Test
     @Transactional

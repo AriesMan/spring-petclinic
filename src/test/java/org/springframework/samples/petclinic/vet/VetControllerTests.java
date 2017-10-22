@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.vet;
 import static org.hamcrest.xml.HasXPath.hasXPath;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -78,5 +79,29 @@ public class VetControllerTests {
             .andExpect(content().contentType(MediaType.APPLICATION_XML_VALUE))
             .andExpect(content().node(hasXPath("/vets/vetList[id=1]/id")));
     }
+
+    @Test
+    public void testProcessCreationFormFail() throws Exception {
+        mockMvc.perform(post("/vets/new")
+            .param("firstName", "Joe")
+            .param("lastName", "Bloggs")
+
+        )
+            .andExpect(status().is2xxSuccessful());
+    }
+
+/*
+
+    @Test
+    public void testProcessCreationFormSuccess() throws Exception {
+        String[] specialties = {"radiology"};
+        mockMvc.perform(post("/vets/new")
+            .param("firstName", "Joe")
+            .param("lastName", "Bloggs")
+            .param("specialties", specialties)
+
+        )
+            .andExpect(status().is3xxRedirection());
+    }*/
 
 }
