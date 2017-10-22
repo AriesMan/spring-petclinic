@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert.*;
 import java.util.Collection;
@@ -65,6 +66,7 @@ public class ClinicServiceTests {
 
     @Autowired
     protected VetRepository vets;
+    
 
     @Test
     public void shouldFindOwnersByLastName() {
