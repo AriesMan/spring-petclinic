@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Juergen Hoeller
@@ -79,14 +80,24 @@ class OwnerController {
 
     @RequestMapping(value = "/owners", method = RequestMethod.GET)
     public String processFindForm(Owner owner, BindingResult result, Map<String, Object> model) {
-
         // allow parameterless GET request for /owners to return all records
-        if (owner.getLastName() == null) {
+
+        if ((owner.getLastName() == null || StringUtils.isEmpty(owner.getLastName()))
+            && (owner.getFirstName() == null || StringUtils.isEmpty(owner.getFirstName()) ) ) {
             owner.setLastName(""); // empty string signifies broadest possible search
         }
 
-        // find owners by last name
-        Collection<Owner> results = this.owners.findByLastName(owner.getLastName());
+        Collection<Owner> results = null;
+        if(owner.getLastName() != null  && !StringUtils.isEmpty(owner.getLastName())   ) {
+            // find owners by last name
+            results = this.owners.findByLastName(owner.getLastName());
+        }else if(owner.getFirstName() != null  && !StringUtils.isEmpty(owner.getFirstName())  ){
+            results = this.owners.findByFirstName(owner.getFirstName());
+        }else{
+            results = this.owners.findByLastName(owner.getLastName());
+        }
+
+
         if (results.isEmpty()) {
             // no owners found
             result.rejectValue("lastName", "notFound", "not found");
@@ -100,6 +111,8 @@ class OwnerController {
             model.put("selections", results);
             return "owners/ownersList";
         }
+
+
     }
 
     @RequestMapping(value = "/owners/{ownerId}/edit", method = RequestMethod.GET)
