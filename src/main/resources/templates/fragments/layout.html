@@ -99,6 +99,17 @@
     /*]]>*/
    </script>
 
+
+
+  <div sec:authorize="isAuthenticated()">
+      <form th:action="@{/logout}" method="post">
+          <input type="hidden" value="Sign Out"/>
+          <button type="submit" name="submit_param" value="submit_value" class="link-button">
+              logout
+          </button>
+      </form>
+  </div>
+
 </body>
 
 </html>

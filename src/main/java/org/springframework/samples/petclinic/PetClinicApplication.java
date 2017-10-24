@@ -21,11 +21,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * PetClinic Spring Boot Application.
- * 
+ *
  * @author Dave Syer
  *
  */
-@SpringBootApplication
+@SpringBootApplication()
 public class PetClinicApplication {
 
     public static void main(String[] args) throws Exception {

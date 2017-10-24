@@ -23,6 +23,7 @@ import org.springframework.samples.petclinic.owner.PetController;
 import org.springframework.samples.petclinic.owner.PetRepository;
 import org.springframework.samples.petclinic.owner.PetType;
 import org.springframework.samples.petclinic.owner.PetTypeFormatter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -63,6 +64,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testInitCreationForm() throws Exception {
         mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID))
             .andExpect(status().isOk())
@@ -71,6 +73,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormSuccess() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID)
             .param("name", "Betty")
@@ -83,6 +86,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormValidationFail() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID)
             .param("name", "Betty")
@@ -94,6 +98,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormValidationFailNoWeight() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID)
             .param("name", "Bingo")
@@ -104,6 +109,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormHasErrors() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID)
             .param("name", "Betty")
@@ -116,6 +122,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testInitUpdateForm() throws Exception {
         mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID))
             .andExpect(status().isOk())
@@ -124,6 +131,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessUpdateFormSuccess() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID)
             .param("name", "Betty")
@@ -136,6 +144,7 @@ public class PetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessUpdateFormHasErrors() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID)
             .param("name", "Betty")

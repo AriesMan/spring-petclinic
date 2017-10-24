@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerController;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -54,6 +55,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testInitCreationForm() throws Exception {
         mockMvc.perform(get("/owners/new"))
             .andExpect(status().isOk())
@@ -62,6 +64,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormSuccess() throws Exception {
         mockMvc.perform(post("/owners/new")
             .param("firstName", "Joe")
@@ -74,6 +77,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormHasErrors() throws Exception {
         mockMvc.perform(post("/owners/new")
             .param("firstName", "Joe")
@@ -88,6 +92,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testInitFindForm() throws Exception {
         mockMvc.perform(get("/owners/find"))
             .andExpect(status().isOk())
@@ -96,6 +101,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessFindFormSuccess() throws Exception {
         given(this.owners.findByLastName("")).willReturn(Lists.newArrayList(george, new Owner()));
         mockMvc.perform(get("/owners"))
@@ -104,6 +110,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessFindFormByLastName() throws Exception {
         given(this.owners.findByLastName(george.getLastName())).willReturn(Lists.newArrayList(george));
         mockMvc.perform(get("/owners")
@@ -114,6 +121,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessFindFormByFirstName() throws Exception {
         given(this.owners.findByFirstName(george.getFirstName())).willReturn(Lists.newArrayList(george));
         mockMvc.perform(get("/owners")
@@ -124,6 +132,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessFindFormNoOwnersFound() throws Exception {
         mockMvc.perform(get("/owners")
             .param("lastName", "Unknown Surname")
@@ -135,6 +144,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testInitUpdateOwnerForm() throws Exception {
         mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID))
             .andExpect(status().isOk())
@@ -148,6 +158,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessUpdateOwnerFormSuccess() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID)
             .param("firstName", "Joe")
@@ -161,6 +172,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessUpdateOwnerFormHasErrors() throws Exception {
         mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID)
             .param("firstName", "Joe")
@@ -175,6 +187,7 @@ public class OwnerControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testShowOwner() throws Exception {
         mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID))
             .andExpect(status().isOk())

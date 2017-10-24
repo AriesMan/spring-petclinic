@@ -22,6 +22,7 @@ import org.springframework.samples.petclinic.vet.Specialty;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetController;
 import org.springframework.samples.petclinic.vet.VetRepository;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -57,6 +58,7 @@ public class VetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testShowVetListHtml() throws Exception {
         mockMvc.perform(get("/vets.html"))
             .andExpect(status().isOk())
@@ -65,6 +67,7 @@ public class VetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testShowResourcesVetList() throws Exception {
         ResultActions actions = mockMvc.perform(get("/vets.json").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
@@ -73,6 +76,7 @@ public class VetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testShowVetListXml() throws Exception {
         mockMvc.perform(get("/vets.xml").accept(MediaType.APPLICATION_XML))
             .andExpect(status().isOk())
@@ -81,6 +85,7 @@ public class VetControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "samantha", password = "password", roles = "USER")
     public void testProcessCreationFormFail() throws Exception {
         mockMvc.perform(post("/vets/new")
             .param("firstName", "Joe")

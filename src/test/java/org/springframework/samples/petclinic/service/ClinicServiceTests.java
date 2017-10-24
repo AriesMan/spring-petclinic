@@ -66,7 +66,7 @@ public class ClinicServiceTests {
 
     @Autowired
     protected VetRepository vets;
-    
+
 
     @Test
     public void shouldFindOwnersByLastName() {
